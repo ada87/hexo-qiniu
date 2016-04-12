@@ -28,15 +28,9 @@ func main() {
 	}
 
 	token := client.MakeUptoken(policy)
-	//构建一个uploader
-	zone := 0
-	uploader := kodocli.NewUploader(zone, nil)
+	uploader := kodocli.NewUploader(0, nil)
 	var ret PutRet
-	//设置上传文件的路径
 	filepath.Walk(Config.Path, func(filename string, fi os.FileInfo, err error) error {
-		//		fmt.Println(filename)
-		//		fmt.Println(fi.Name())
-		//		fmt.Println(fi.IsDir())
 		if !fi.IsDir() {
 			target := strings.Replace(filename, "\\", "/", -1)
 			target = strings.Split(target, "/public/")[1]
@@ -46,23 +40,7 @@ func main() {
 			if res != nil {
 				fmt.Println("io.Put failed:", res)
 			}
-
 		}
 		return nil
 	})
-
-	//	filepath := "G:\\install-unbuntu\\apr-1.5.1.tar.gz"
-	//	//调用PutFileWithoutKey方式上传，没有设置saveasKey以文件的hash命名
-
-	//	res := uploader.PutFile(nil, &ret, token, "apr-1.5.1.tar.gz", filepath, nil)
-	//	//	res := uploader.PutFileWithoutKey(nil, &ret, token, filepath, nil)
-
-	//	//打印返回的信息
-	//	fmt.Println(ret)
-	//打印出错信息
-	//	if res != nil {
-	//		fmt.Println("io.Put failed:", res)
-	//		return
-	//	}
-
 }
