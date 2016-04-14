@@ -23,9 +23,18 @@ func main() {
 	//创建一个Client
 	client := kodo.New(0, nil)
 	uploader := kodocli.NewUploader(0, nil)
+	fast := true //true：快速模式：仅上传HTML，否则全部上传
+	fmt.Println(os.Args)
+	if len(os.Args) >= 2 {
+		fast = false
+	}
+	fmt.Println("使用快速模式：", fast)
 	var ret PutRet
 	filepath.Walk(Config.Path, func(filename string, fi os.FileInfo, err error) error {
 		if !fi.IsDir() {
+			if fast && !strings.HasSuffix(fi.Name(), ".html") {
+				return nil
+			}
 			target := strings.Replace(filename, "\\", "/", -1)
 			target = strings.Split(target, "/public/")[1]
 			policy := &kodo.PutPolicy{
